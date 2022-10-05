@@ -113,6 +113,24 @@ public class GameBoardAgent : MonoBehaviour
         State = AgentNavigationState.HasPath;
     }
 
+    public void RandomMove(float range)
+    {
+        Vector3 randomDestination;
+        if (_gameboard.FindRandomPosition(transform.position, range, out randomDestination))
+        {
+            SetDestination(randomDestination);
+        }
+    }
+
+    public void RandomMove()
+    {
+        Vector3 randomDestination;
+        if (_gameboard.FindRandomPosition(out randomDestination))
+        {
+            SetDestination(randomDestination);
+        }
+    }
+
     public void SetDestination(Vector3 destination)
     {
         StopMoving();

@@ -36,6 +36,12 @@ public class GameManager : MonoBehaviour
         _arCamera = Camera.main;
     }
 
+    private void Start()
+    {
+        //Stops mobile screen from timing out from inactivity.
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+    }
+
     private void OnDestroy()
     {
         GameboardFactory.GameboardInitialized -= OnGameBoardCreated;

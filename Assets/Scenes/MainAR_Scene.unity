@@ -625,7 +625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf59e07acd5aa24596960c9a07459fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _friendPrefab: {fileID: 2022605993248713342, guid: 750b6163dc1add64ea12ac0b0ea8757d, type: 3}
+  _friendPrefab: {fileID: 8260130363081778458, guid: 9077fd7026798a845b95ae41f2073041, type: 3}
   _spawnRange: 3
   _textPrompt: {fileID: 1165036504}
 --- !u!1 &1788626281
