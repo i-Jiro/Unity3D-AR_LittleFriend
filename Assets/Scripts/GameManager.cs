@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     
     private Camera _arCamera;
     private IGameboard _gameBoard;
-    private GameObject _friendAgentGameObject;
+    private GameObject _spawnedFriend;
     private bool _isGameBoardRunning = false;
     private bool _hasSpawnedFriend = false;
     
@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
     public void ARSessionStopped()
     {
         _gameBoard.Clear();
-        Destroy(_friendAgentGameObject);
+        _spawnedFriend = null;
+        Destroy(_spawnedFriend);
         _hasSpawnedFriend = false;
     }
 
@@ -72,12 +73,15 @@ public class GameManager : MonoBehaviour
 
     private void SpawnFriend()
     {
-        if (_friendAgentGameObject != null) return;
+        if (_spawnedFriend != null) return;
         //Find a valid space around the AR camera to place agent.
         if (_gameBoard.FindRandomPosition(_arCamera.transform.position, _spawnRange, out Vector3 randomPosition))
         {
-            _friendAgentGameObject = Instantiate(_friendPrefab, randomPosition, Quaternion.identity);
-            _friendAgentGameObject.transform.LookAt(_arCamera.transform.position);
+            _spawnedFriend = Instantiate(_friendPrefab, randomPosition, Quaternion.identity);
+            //Face towards arCamera location.
+            Vector3 lookRotationTarget =  _arCamera.transform.position - _spawnedFriend.transform.position ;
+            lookRotationTarget.y = 0f;
+            _spawnedFriend.transform.rotation = Quaternion.LookRotation(lookRotationTarget);
             _hasSpawnedFriend = true;
             _textPrompt.text = "Spawned!";
         }
