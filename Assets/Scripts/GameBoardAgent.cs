@@ -154,6 +154,13 @@ public class GameBoardAgent : MonoBehaviour
             _actorMoveCoroutine = StartCoroutine(Move(this.transform, _path.Waypoints));
         }
     }
+
+    public float RemainingDistance()
+    {
+        if (State == AgentNavigationState.Idle)
+            return 0f;
+        return Vector3.Distance(transform.position, _currentDestination);
+    }
     
     public void StopMoving()
     {
@@ -208,7 +215,7 @@ public class GameBoardAgent : MonoBehaviour
 
             yield return null;
         }
-
+        
         _actorMoveCoroutine = null;
         State = AgentNavigationState.Idle;
     }

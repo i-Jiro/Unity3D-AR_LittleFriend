@@ -1,31 +1,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime;
 using Niantic.ARDK.Extensions.Gameboard;
 using Niantic.ARDK.Utilities;
 using UnityEngine;
 
-public enum FriendActionState
-{ 
-    Idle, Following, Wondering
-}
-
-public class FriendBehavior : MonoBehaviour
+public class FriendController : MonoBehaviour
 {
+    public float DistanceToPlayer { get; private set; } = 0.0f;
     private Camera _arCamera;
-    private GameBoardAgent _agent;
-    private float _timeUntilNextAction = 0f;
     private IGameboard _gameboard;
-    
+    private BehaviorTree _behavior;
+
     private void Awake()
     {
-        _agent = GetComponent<GameBoardAgent>();
         _arCamera = Camera.main;
+        _behavior = GetComponent<BehaviorTree>();
     }
 
     private void Start()
     {
         GameboardFactory.GameboardInitialized += GameBoardCreated;
+        if (_behavior != null)
+        {
+            _behavior.EnableBehavior();
+        }
     }
 
     private void OnDestroy()
@@ -51,28 +51,15 @@ public class FriendBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_timeUntilNextAction < 15f && _agent.State == AgentNavigationState.Idle)
-        {
-            _timeUntilNextAction += Time.deltaTime;
-            return;
-        }
-        
-        if (_agent.State == AgentNavigationState.HasPath) return;
-        _agent.RandomMove();
-        _timeUntilNextAction = 0f;
+        CalculateDistanceToPlayer();
+        //Debug.Log(DistanceToPlayer);
     }
 
-    private void FollowPlayer()
+    //Distance from player horizontally only.
+    private void CalculateDistanceToPlayer()
     {
-        if (Vector3.Distance(_arCamera.transform.position, transform.position) < 1.0f)
-        { 
-            _agent.StopMoving();
-            return;
-        }
-
-        if (_gameboard.FindNearestFreePosition(_arCamera.transform.position, out Vector3 nearestPosition))
-        {
-            _agent.SetDestination(_arCamera.transform.position);
-        }
+        Vector3 playerPos = _arCamera.transform.position;
+        playerPos.y = transform.position.y;
+        DistanceToPlayer = Vector3.Distance(playerPos, transform.position);
     }
 }
