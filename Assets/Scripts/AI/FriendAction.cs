@@ -9,12 +9,10 @@ namespace Core.AI
     public abstract class FriendAction : Action
     {
         protected GameBoardAgent agent;
-        protected Animator animator;
-        
+
         public override void OnAwake()
         {
             agent = GetComponent<GameBoardAgent>();
-            animator = GetComponent<Animator>();
         }
     }
 }
