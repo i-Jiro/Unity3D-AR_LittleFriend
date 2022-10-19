@@ -30,12 +30,13 @@ namespace Core.AI
                 Debug.LogError("Gameboard agent is null!");
                 return TaskStatus.Failure;
             }
+            
             if (IsComplete())
             {
                 agent.StopMoving();
                 return TaskStatus.Success;
             }
-            agent.SetDestination(_camera.transform.position);
+           
             return TaskStatus.Running;
         }
         

@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class FriendController : MonoBehaviour
 {
-    public float DistanceToPlayer { get; private set; } = 0.0f;
     private Camera _arCamera;
     private IGameboard _gameboard;
     private BehaviorTree _behavior;
@@ -47,18 +46,12 @@ public class FriendController : MonoBehaviour
     {
         _gameboard = null;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        CalculateDistanceToPlayer();
-    }
-
+    
     //Distance from player horizontally only.
-    private void CalculateDistanceToPlayer()
+    public float GetDistanceToPlayer()
     {
         Vector3 playerPos = _arCamera.transform.position;
         playerPos.y = transform.position.y;
-        DistanceToPlayer = Vector3.Distance(playerPos, transform.position);
+        return Vector3.Distance(playerPos, transform.position);
     }
 }
