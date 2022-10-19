@@ -16,20 +16,18 @@ namespace Core.AI
         public override void OnStart()
         {
             agent.RandomMove();
-            animator.SetBool("IsMoving", true);
         }
 
         public override TaskStatus OnUpdate()
         {
             if (agent == null)
             {
-                Debug.LogError("Gameboard agent is null!");
                 return TaskStatus.Failure;
             }
 
             if (IsComplete())
             {
-                animator.SetBool("IsMoving", false);
+                agent.StopMoving();
                 return TaskStatus.Success;
             }
 

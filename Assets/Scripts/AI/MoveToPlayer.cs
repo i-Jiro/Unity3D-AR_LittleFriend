@@ -21,7 +21,6 @@ namespace Core.AI
         public override void OnStart()
         {
             agent.SetDestination(_camera.transform.position);
-            animator.SetBool("IsMoving", true);
         }
 
         public override TaskStatus OnUpdate()
@@ -33,7 +32,7 @@ namespace Core.AI
             }
             if (IsComplete())
             {
-                animator.SetBool("IsMoving", false);
+                agent.StopMoving();
                 return TaskStatus.Success;
             }
             agent.SetDestination(_camera.transform.position);

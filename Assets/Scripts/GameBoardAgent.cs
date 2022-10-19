@@ -22,6 +22,15 @@ public class GameBoardAgent : MonoBehaviour
     
     private Coroutine _actorMoveCoroutine;
     private Coroutine _actorJumpCoroutine;
+
+    public delegate void StartMoveEventHandler();
+    public event StartMoveEventHandler AgentStartMove;
+    public delegate void EndMoveEventHandler();
+    public event EndMoveEventHandler AgentEndMove;
+
+    public delegate void JumpEventHandler();
+    public event JumpEventHandler AgentJumping;
+    
     
     public AgentNavigationState State { get; set; } = AgentNavigationState.Idle;
     
@@ -165,7 +174,10 @@ public class GameBoardAgent : MonoBehaviour
     public void StopMoving()
     {
         if (_actorMoveCoroutine != null)
+        {
             StopCoroutine(_actorMoveCoroutine);
+            AgentEndMove?.Invoke();
+        }
     }
 
     private IEnumerator Move(Transform actor, IList<Waypoint> path)
@@ -174,6 +186,7 @@ public class GameBoardAgent : MonoBehaviour
         var startRotation = actor.rotation;
         var interval = 0.0f;
         var index = 0;
+        AgentStartMove?.Invoke();
         
         while (index < path.Count)
         {
@@ -217,6 +230,7 @@ public class GameBoardAgent : MonoBehaviour
         }
         
         _actorMoveCoroutine = null;
+        AgentEndMove?.Invoke();
         State = AgentNavigationState.Idle;
     }
 
@@ -225,7 +239,8 @@ public class GameBoardAgent : MonoBehaviour
         var interval = 0f;
         var startRotation = actor.rotation;
         var height = Mathf.Max(0.1f, Mathf.Abs(to.y - from.y));
-
+        AgentJumping?.Invoke();
+        
         while (interval < 1.0f)
         {
             interval += Time.deltaTime * speed;

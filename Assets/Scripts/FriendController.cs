@@ -52,7 +52,6 @@ public class FriendController : MonoBehaviour
     void Update()
     {
         CalculateDistanceToPlayer();
-        //Debug.Log(DistanceToPlayer);
     }
 
     //Distance from player horizontally only.
